@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Price Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+    
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+    
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+    
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+    
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+    
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    
+        #predictedPrice {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>House Price Prediction</h1>
+    </header>
+    <h2>Enter House Features</h2>
+    <form id="predictionForm">
+        <label>Square Meters:</label>
+        <input type="number" name="squareMeters" required><br>
+
+        <label>Number of Rooms:</label>
+        <select id="numberOfRooms" name="numberOfRooms" required></select><br>
+
+        <label>Floors:</label>
+        <select id="floors" name="floors" required></select><br>
+
+        <label>Previous Owners:</label>
+        <select id="numPrevOwners" name="numPrevOwners" required></select><br>
+
+        <label>Age of House:</label>
+        <input type="number" name="ageOfHouse" required><br>
+
+        <label>City Part Range:</label>
+        <input type="number" name="cityPartRange" required><br>
+
+        <label>Has Yard:</label>
+        <select name="hasYard" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>Has Pool:</label>
+        <select name="hasPool" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>Is New Built:</label>
+        <select name="isNewBuilt" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>Has Storm Protector:</label>
+        <select name="hasStormProtector" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>Basement:</label>
+        <select name="basement" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>Attic:</label>
+        <select name="attic" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>Garage:</label>
+        <select name="garage" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>Has Storage Room:</label>
+        <select name="hasStorageRoom" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>Has Guest Room:</label>
+        <select name="hasGuestRoom" required>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select><br>
+
+        <label>City Code:</label>
+        <select id="cityCode" name="cityCode" required></select><br>
+
+        <button type="button" onclick="sendData()">Predict Price</button>
+    </form>
+
+    <script>
+        function fetchOptions(endpoint, dropdownId) {
+            fetch(endpoint)
+                .then(response => response.json())
+                .then(data => {
+                    const dropdown = document.getElementById(dropdownId);
+                    dropdown.innerHTML = '<option value="" disabled selected>Select an option</option>';
+                    data.forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option;
+                        optionElement.textContent = option;
+                        dropdown.appendChild(optionElement);
+                    });
+                });
+        }
+
+        window.onload = function() {
+            fetchOptions('/number_of_rooms', 'numberOfRooms');
+            fetchOptions('/floors', 'floors');
+            fetchOptions('/num_prev_owners', 'numPrevOwners');
+            fetchOptions('/city_codes', 'cityCode');
+        };
+
+        function sendData() {
+            const form = document.getElementById('predictionForm');
+            const formData = new FormData(form);
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(price => {
+                document.getElementById("predictedPrice").innerHTML = "Predicted Price: INR " + price;
+            });
+        }
+    </script>
+</body>
+</html>
