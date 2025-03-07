@@ -148,6 +148,9 @@
         <button type="button" onclick="sendData()">Predict Price</button>
     </form>
 
+    <div id="predictedPrice"></div>
+
+
     <script>
         function fetchOptions(endpoint, dropdownId) {
             fetch(endpoint)
@@ -176,9 +179,17 @@
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.text())
-            .then(price => {
-                document.getElementById("predictedPrice").innerHTML = "Predicted Price: INR " + price;
+            .then(response => response.json())
+            .then(data => {
+                if (data.price !== undefined) {
+                    document.getElementById("predictedPrice").innerHTML = "Predicted Price: INR " + data.price;
+                } else {
+                    document.getElementById("predictedPrice").innerHTML = "Error: No price returned!";
+                }            
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("predictedPrice").innerHTML = "Error predicting price!";
             });
         }
     </script>
