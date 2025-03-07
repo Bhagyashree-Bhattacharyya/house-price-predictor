@@ -74,13 +74,13 @@
         <input type="number" name="squareMeters" required><br>
 
         <label>Number of Rooms:</label>
-        <select id="numberOfRooms" name="numberOfRooms" required></select><br>
+        <input type="number" name="numberOfRooms" required></input><br>
 
         <label>Floors:</label>
-        <select id="floors" name="floors" required></select><br>
+        <input type="number" name="floors" required></input><br>
 
         <label>Previous Owners:</label>
-        <select id="numPrevOwners" name="numPrevOwners" required></select><br>
+        <input type="number" name="numPrevOwners" required></input><br>
 
         <label>Age of House:</label>
         <input type="number" name="ageOfHouse" required><br>
@@ -143,7 +143,7 @@
         </select><br>
 
         <label>City Code:</label>
-        <select id="cityCode" name="cityCode" required></select><br>
+        <input type="number" name="cityCode" required></input><br>
 
         <button type="button" onclick="sendData()">Predict Price</button>
     </form>
@@ -164,12 +164,9 @@
                 });
         }
 
-        window.onload = function() {
-            fetchOptions('/number_of_rooms', 'numberOfRooms');
-            fetchOptions('/floors', 'floors');
-            fetchOptions('/num_prev_owners', 'numPrevOwners');
-            fetchOptions('/city_codes', 'cityCode');
-        };
+        // window.onload = function() {
+        //     fetchOptions('/city_codes', 'cityCode');
+        // };
 
         function sendData() {
             const form = document.getElementById('predictionForm');

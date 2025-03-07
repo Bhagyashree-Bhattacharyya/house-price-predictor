@@ -3,8 +3,8 @@ import pickle
 import pandas as pd
 import numpy as np
 
-model = pickle.load(open('LinearModel.pkl', 'rb'))
-data = pd.read_csv('final_dataset.csv')
+model = pickle.load(open('models/LinearModel.pkl', 'rb'))
+data = pd.read_csv('data/final_dataset.csv')
 app = Flask(__name__)
 
 
@@ -18,7 +18,6 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    # Get input values from the form
     squareMeters = request.form.get('squareMeters')
     numberOfRooms = request.form.get('numberOfRooms')
     floors = request.form.get('floors')
@@ -47,12 +46,10 @@ def predict():
     for col in numeric_cols:
         input_data[col] = pd.to_numeric(input_data[col], errors='coerce')
 
-    # for binary (Yes/No) features to 1/0
     binary_cols = ['hasYard', 'hasPool', 'isNewBuilt', 'hasStormProtector', 'basement', 'attic', 'garage', 'hasStorageRoom', 'hasGuestRoom']
     for col in binary_cols:
         input_data[col] = input_data[col].map({'yes': 1, 'no': 0})
 
-    # for unknown categories
     for column in input_data.columns:
         unknown_categories = set(input_data[column]) - set(data[column].unique())
         if unknown_categories:
